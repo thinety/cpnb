@@ -1,2 +1,1 @@
-# cpnb
-Competitive Programming Notebook
+# Competitive Programming Notebook
