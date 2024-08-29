@@ -23,7 +23,7 @@ struct modint {
 
 using mint = modint<998244353>;
 
-struct lazy_segtree {
+struct LazySegtree {
     using Node = struct {
         mint sum;
         u32 len;
@@ -149,9 +149,8 @@ struct lazy_segtree {
     unique_ptr<Action[]> lazy_;
     size_t len_;
 
-    template<typename F>
-    lazy_segtree(F const& f, size_t len)
-    {
+    template <typename F>
+    void init(F const& f, size_t len) {
         len_ = len;
         data_.reset(new Node[2*len_-1]);
         lazy_.reset(new Action[2*len_-1]);
@@ -174,8 +173,8 @@ int main() {
     vector<u32> A(N);
     for (auto& Ai : A) cin >> Ai;
 
-    lazy_segtree seg(
-        [&] (auto i) -> lazy_segtree::Node {
+    LazySegtree seg; seg.init(
+        [&] (auto i) -> LazySegtree::Node {
             return {
                 .sum = A[i],
                 .len = 1,

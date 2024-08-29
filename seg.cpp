@@ -4,7 +4,7 @@ using namespace std;
 using u32 = uint32_t;
 using u64 = uint64_t;
 
-struct segtree {
+struct Segtree {
     using Node = u64;
     static Node merge(Node const& node1, Node const& node2) {
         return node1 + node2;
@@ -90,9 +90,8 @@ struct segtree {
     unique_ptr<Node[]> data_;
     size_t len_;
 
-    template<typename F>
-    segtree(F const& f, size_t len)
-    {
+    template <typename F>
+    void init(F const& f, size_t len) {
         len_ = len;
         data_.reset(new Node[2*len_-1]);
         build(f, &data_[0], 0, 0, len_);
@@ -114,7 +113,7 @@ int main() {
     vector<u32> A(N);
     for (auto& Ai : A) cin >> Ai;
 
-    segtree seg(
+    Segtree seg; seg.init(
         [&] (auto i) {
             return A[i];
         },
