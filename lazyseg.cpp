@@ -67,11 +67,10 @@ struct LazySegtree {
     }
 
     template <typename F>
-    static void build(F const& f, Node* data, Action* lazy, size_t i, size_t bot, size_t top) {
-        size_t mid = (bot + top + 1) / 2;
-
-        size_t i1 = i + 1;
-        size_t i2 = i + 2 * (mid - bot);
+    static void build(F const& f, Node* data, Action* lazy, u32 i, u32 bot, u32 top) {
+        u32 mid = (bot + top) / 2;
+        u32 i1 = i + 1;
+        u32 i2 = i + 2 * (mid - bot);
 
         lazy[i] = default_action();
 
@@ -86,11 +85,10 @@ struct LazySegtree {
         data[i] = merge(data[i1], data[i2]);
     }
 
-    static void update(Action const& action, Node* data, Action* lazy, size_t l, size_t r, size_t i, size_t bot, size_t top) {
-        size_t mid = (bot + top + 1) / 2;
-
-        size_t i1 = i + 1;
-        size_t i2 = i + 2 * (mid - bot);
+    static void update(Action const& action, Node* data, Action* lazy, u32 l, u32 r, u32 i, u32 bot, u32 top) {
+        u32 mid = (bot + top) / 2;
+        u32 i1 = i + 1;
+        u32 i2 = i + 2 * (mid - bot);
 
         if (l <= bot && top <= r) {
             merge_action(action, lazy[i]);
@@ -115,11 +113,10 @@ struct LazySegtree {
         data[i] = merge(data[i1], data[i2]);
     }
 
-    static Output query(Args const& args, Node* data, Action* lazy, size_t l, size_t r, size_t i, size_t bot, size_t top) {
-        size_t mid = (bot + top + 1) / 2;
-
-        size_t i1 = i + 1;
-        size_t i2 = i + 2 * (mid - bot);
+    static Output query(Args const& args, Node* data, Action* lazy, u32 l, u32 r, u32 i, u32 bot, u32 top) {
+        u32 mid = (bot + top) / 2;
+        u32 i1 = i + 1;
+        u32 i2 = i + 2 * (mid - bot);
 
         if (r <= bot || top <= l) {
             return neutral(args);
@@ -147,21 +144,21 @@ struct LazySegtree {
 
     unique_ptr<Node[]> data_;
     unique_ptr<Action[]> lazy_;
-    size_t len_;
+    u32 len_;
 
     template <typename F>
-    void init(F const& f, size_t len) {
+    void init(F const& f, u32 len) {
         len_ = len;
         data_.reset(new Node[2*len_-1]);
         lazy_.reset(new Action[2*len_-1]);
         build(f, &data_[0], &lazy_[0], 0, 0, len_);
     }
 
-    void update(Action const& action, size_t l, size_t r) {
+    void update(Action const& action, u32 l, u32 r) {
         update(action, &data_[0], &lazy_[0], l, r, 0, 0, len_);
     }
 
-    Output query(Args const& args, size_t l, size_t r) {
+    Output query(Args const& args, u32 l, u32 r) {
         return query(args, &data_[0], &lazy_[0], l, r, 0, 0, len_);
     }
 };
@@ -174,7 +171,7 @@ int main() {
     for (auto& Ai : A) cin >> Ai;
 
     LazySegtree seg; seg.init(
-        [&] (auto i) -> LazySegtree::Node {
+        [&] (u32 i) -> LazySegtree::Node {
             return {
                 .sum = A[i],
                 .len = 1,
