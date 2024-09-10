@@ -94,7 +94,9 @@ struct LazySegtree {
             merge_action(action, lazy[i]);
         }
 
-        apply_action(lazy[i], data[i]);
+        if ((l <= bot && top <= r) || (r <= bot || top <= l)) {
+            apply_action(lazy[i], data[i]);
+        }
 
         if (bot + 1 != top) {
             merge_action(lazy[i], lazy[i1]);
@@ -103,7 +105,7 @@ struct LazySegtree {
 
         lazy[i] = default_action();
 
-        if ((l <= bot && top <= r) || r <= bot || top <= l) {
+        if ((l <= bot && top <= r) || (r <= bot || top <= l)) {
             return;
         }
 
